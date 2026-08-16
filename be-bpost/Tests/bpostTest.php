@@ -79,7 +79,7 @@ final class bpostTest extends BaseTestCase
         self::assertSame('PLACE DES PALAIS', $result->getStreetName());
         self::assertSame('1000', $result->getPostalCode());
         self::assertSame('BRUXELLES', $result->getLocality());
-        self::assertSame('BELGIQUE', $result->getCountry());
+        self::assertSame('BELGIQUE', (string) $result->getCountry());
     }
 
     public function testGeocodeQueryWithData(): void
@@ -106,7 +106,7 @@ final class bpostTest extends BaseTestCase
         self::assertSame('PLACE DES PALAIS', $result->getStreetName());
         self::assertSame('1000', $result->getPostalCode());
         self::assertSame('BRUXELLES', $result->getLocality());
-        self::assertSame('BELGIQUE', $result->getCountry());
+        self::assertSame('BELGIQUE', (string) $result->getCountry());
     }
 
     protected function getCacheDir(): string
