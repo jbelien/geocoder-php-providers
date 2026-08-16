@@ -121,8 +121,8 @@ final class SPWTest extends BaseTestCase
         /** @var Address $result */
         $result = $results->first();
         self::assertInstanceOf(Address::class, $result);
-        self::assertEqualsWithDelta(50.466390, $result->getCoordinates()->getLatitude(), 0.00001);
-        self::assertEqualsWithDelta(4.866114, $result->getCoordinates()->getLongitude(), 0.00001);
+        self::assertEqualsWithDelta(50.466589, $result->getCoordinates()->getLatitude(), 0.00001);
+        self::assertEqualsWithDelta(4.866197, $result->getCoordinates()->getLongitude(), 0.00001);
         self::assertSame('Namur', $result->getLocality());
     }
 
