@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Geocoder package.
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +16,12 @@ use Geocoder\IntegrationTest\ProviderIntegrationTest;
 use Geocoder\Provider\Addok\Addok;
 use Psr\Http\Client\ClientInterface;
 
-class IntegrationTest extends ProviderIntegrationTest
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class IntegrationTest extends ProviderIntegrationTest
 {
     protected bool $testAddress = true;
 
@@ -25,8 +32,8 @@ class IntegrationTest extends ProviderIntegrationTest
     protected bool $testIpv6 = false;
 
     protected array $skippedTests = [
-        'testGeocodeQuery'              => 'BAN Server supports France only.',
-        'testReverseQuery'              => 'BAN Server supports France only.',
+        'testGeocodeQuery' => 'BAN Server supports France only.',
+        'testReverseQuery' => 'BAN Server supports France only.',
         'testReverseQueryWithNoResults' => 'Addok returns "debug" information for reverse geocoding on coordinates 0, 0. See https://github.com/addok/addok/issues/505',
     ];
 

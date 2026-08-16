@@ -32,12 +32,12 @@ final class UrbIS extends AbstractHttpProvider implements Provider
     /**
      * @var string
      */
-    const GEOCODE_ENDPOINT_URL = 'https://geoservices.irisnet.be/localization/Rest/Localize/getaddresses?spatialReference=4326&language=%s&address=%s';
+    public const GEOCODE_ENDPOINT_URL = 'https://geoservices.irisnet.be/localization/Rest/Localize/getaddresses?spatialReference=4326&language=%s&address=%s';
 
     /**
      * @var string
      */
-    const REVERSE_ENDPOINT_URL = 'https://geoservices.irisnet.be/localization/Rest/Localize/getaddressfromxy?json=%s';
+    public const REVERSE_ENDPOINT_URL = 'https://geoservices.irisnet.be/localization/Rest/Localize/getaddressfromxy?json=%s';
 
     /**
      * @param ClientInterface $client an HTTP adapter
@@ -47,9 +47,6 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function geocodeQuery(GeocodeQuery $query): Collection
     {
         $address = $query->getText();
@@ -64,11 +61,11 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         }
 
         $language = '';
-        if (!is_null($query->getLocale()) && preg_match('/^(fr|nl).*$/', $query->getLocale(), $matches) === 1) {
+        if (null !== $query->getLocale() && 1 === preg_match('/^(fr|nl).*$/', $query->getLocale(), $matches)) {
             $language = $matches[1];
         }
 
-        $url = sprintf(self::GEOCODE_ENDPOINT_URL, urlencode($language), urlencode($address));
+        $url = \sprintf(self::GEOCODE_ENDPOINT_URL, urlencode($language), urlencode($address));
         $json = $this->executeQuery($url);
 
         // no result
@@ -89,7 +86,8 @@ final class UrbIS extends AbstractHttpProvider implements Provider
                 ->setStreetName($streetName)
                 ->setLocality($municipality)
                 ->setPostalCode($postCode)
-                ->setBounds($location->extent->ymin, $location->extent->xmin, $location->extent->ymax, $location->extent->xmax);
+                ->setBounds($location->extent->ymin, $location->extent->xmin, $location->extent->ymax, $location->extent->xmax)
+            ;
 
             $results[] = $builder->build();
         }
@@ -97,9 +95,6 @@ final class UrbIS extends AbstractHttpProvider implements Provider
         return new AddressCollection($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reverseQuery(ReverseQuery $query): Collection
     {
         $coordinates = $query->getCoordinates();
@@ -107,7 +102,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
 
         $jsonQuery = [
             'language' => $language,
-            'point'    => [
+            'point' => [
                 // x, y are switched in the API
                 'y' => $coordinates->getLongitude(),
                 'x' => $coordinates->getLatitude(),
@@ -115,7 +110,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
             'SRS_In' => 4326,
         ];
 
-        $url = sprintf(self::REVERSE_ENDPOINT_URL, urlencode(json_encode($jsonQuery)));
+        $url = \sprintf(self::REVERSE_ENDPOINT_URL, urlencode(json_encode($jsonQuery)));
         $json = $this->executeQuery($url);
 
         // no result
@@ -136,26 +131,19 @@ final class UrbIS extends AbstractHttpProvider implements Provider
             ->setStreetNumber($number)
             ->setStreetName($streetName)
             ->setLocality($municipality)
-            ->setPostalCode($postCode);
+            ->setPostalCode($postCode)
+        ;
 
         $results[] = $builder->build();
 
         return new AddressCollection($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'urbis';
     }
 
-    /**
-     * @param string $url
-     *
-     * @return \stdClass
-     */
     private function executeQuery(string $url): \stdClass
     {
         $content = $this->getUrlContents($url);

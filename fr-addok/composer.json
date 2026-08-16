@@ -22,7 +22,8 @@
         "geocoder-php/provider-integration-tests": "^1.0",
         "php-http/curl-client": "^2.0",
         "php-http/message": "^1.0",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "friendsofphp/php-cs-fixer": "^3.95"
     },
     "autoload": {
         "psr-4": {
@@ -35,6 +36,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "php-cs-fixer:check": "php-cs-fixer --config=../.php-cs-fixer.dist.php check . --diff",
+        "php-cs-fixer:fix": "php-cs-fixer --config=../.php-cs-fixer.dist.php fix .",
         "test": "phpunit",
         "test-ci": "phpunit --coverage-text --coverage-clover=coverage.clover"
     },

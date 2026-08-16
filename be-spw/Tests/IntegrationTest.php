@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Geocoder package.
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +16,12 @@ use Geocoder\IntegrationTest\ProviderIntegrationTest;
 use Geocoder\Provider\SPW\SPW;
 use Psr\Http\Client\ClientInterface;
 
-class IntegrationTest extends ProviderIntegrationTest
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class IntegrationTest extends ProviderIntegrationTest
 {
     protected bool $testAddress = true;
 
@@ -25,9 +32,9 @@ class IntegrationTest extends ProviderIntegrationTest
     protected bool $testIpv6 = false;
 
     protected array $skippedTests = [
-        'testGeocodeQuery'              => 'SPW provider supports Belgium only (and does not support "en" locale).',
+        'testGeocodeQuery' => 'SPW provider supports Belgium only (and does not support "en" locale).',
         'testGeocodeQueryWithNoResults' => 'SPW provider supports Belgium only (and does not support "en" locale).',
-        'testReverseQuery'              => 'SPW provider supports Belgium only (and does not support "en" locale).',
+        'testReverseQuery' => 'SPW provider supports Belgium only (and does not support "en" locale).',
         'testReverseQueryWithNoResults' => 'SPW provider supports Belgium only (and does not support "en" locale).',
     ];
 

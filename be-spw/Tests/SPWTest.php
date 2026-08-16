@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Geocoder\Provider\SPW\Tests;
 
+use Geocoder\Exception\InvalidArgument;
+use Geocoder\Exception\UnsupportedOperation;
 use Geocoder\IntegrationTest\BaseTestCase;
 use Geocoder\Model\Address;
 use Geocoder\Model\AddressCollection;
@@ -19,144 +21,149 @@ use Geocoder\Provider\SPW\SPW;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
 
-class SPWTest extends BaseTestCase
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class SPWTest extends BaseTestCase
 {
-    protected function getCacheDir()
+    public function testGeocodeWithLocalhostIPv4(): void
     {
-        return __DIR__.'/.cached_responses';
-    }
-
-    public function testGeocodeWithLocalhostIPv4()
-    {
-        $this->expectException(\Geocoder\Exception\UnsupportedOperation::class);
+        $this->expectException(UnsupportedOperation::class);
         $this->expectExceptionMessage('The SPW provider does not support IP addresses, only street addresses.');
 
         $provider = new SPW($this->getMockedHttpClient());
         $provider->geocodeQuery(GeocodeQuery::create('127.0.0.1'));
     }
 
-    public function testGeocodeWithLocalhostIPv6()
+    public function testGeocodeWithLocalhostIPv6(): void
     {
-        $this->expectException(\Geocoder\Exception\UnsupportedOperation::class);
+        $this->expectException(UnsupportedOperation::class);
         $this->expectExceptionMessage('The SPW provider does not support IP addresses, only street addresses.');
 
         $provider = new SPW($this->getMockedHttpClient());
         $provider->geocodeQuery(GeocodeQuery::create('::1'));
     }
 
-    public function testGeocodeWithRealIPv6()
+    public function testGeocodeWithRealIPv6(): void
     {
-        $this->expectException(\Geocoder\Exception\UnsupportedOperation::class);
+        $this->expectException(UnsupportedOperation::class);
         $this->expectExceptionMessage('The SPW provider does not support IP addresses, only street addresses.');
 
         $provider = new SPW($this->getMockedHttpClient());
         $provider->geocodeQuery(GeocodeQuery::create('::ffff:88.188.221.14'));
     }
 
-    public function testHouseReverseQuery()
+    public function testHouseReverseQuery(): void
     {
         $provider = new SPW($this->getHttpClient());
         $results = $provider->reverseQuery(ReverseQuery::fromCoordinates(50.461370, 4.840830));
 
-        $this->assertInstanceOf(AddressCollection::class, $results);
-        $this->assertNotEmpty($results);
+        self::assertInstanceOf(AddressCollection::class, $results);
+        self::assertNotEmpty($results);
 
-        /** @var \Geocoder\Model\Address $result */
+        /** @var Address $result */
         $result = $results->first();
-        $this->assertInstanceOf(Address::class, $result);
-        $this->assertEquals('83', $result->getStreetNumber());
-        $this->assertEquals('Chaussée de Charleroi', $result->getStreetName());
-        $this->assertEquals('5000', $result->getPostalCode());
-        $this->assertEquals('Namur', $result->getLocality());
-        $this->assertEquals('Namur', $result->getSubLocality());
+        self::assertInstanceOf(Address::class, $result);
+        self::assertSame('83', $result->getStreetNumber());
+        self::assertSame('Chaussée de Charleroi', $result->getStreetName());
+        self::assertSame('5000', $result->getPostalCode());
+        self::assertSame('Namur', $result->getLocality());
+        self::assertSame('Namur', $result->getSubLocality());
     }
 
-    public function testHouseGeocodeQuery()
+    public function testHouseGeocodeQuery(): void
     {
         $provider = new SPW($this->getHttpClient());
         $results = $provider->geocodeQuery(GeocodeQuery::create('Chaussée de Charleroi 83 5000 Namur'));
 
-        $this->assertInstanceOf(AddressCollection::class, $results);
-        $this->assertNotEmpty($results);
+        self::assertInstanceOf(AddressCollection::class, $results);
+        self::assertNotEmpty($results);
 
-        /** @var \Geocoder\Model\Address $result */
+        /** @var Address $result */
         $result = $results->first();
-        $this->assertInstanceOf(Address::class, $result);
-        $this->assertEqualsWithDelta(50.461370, $result->getCoordinates()->getLatitude(), 0.00001);
-        $this->assertEqualsWithDelta(4.840830, $result->getCoordinates()->getLongitude(), 0.00001);
-        $this->assertEquals('83', $result->getStreetNumber());
-        $this->assertEquals('Chaussée de Charleroi', $result->getStreetName());
-        $this->assertEquals('5000', $result->getPostalCode());
-        $this->assertEquals('Namur', $result->getSubLocality());
-        $this->assertEquals('Namur', $result->getLocality());
+        self::assertInstanceOf(Address::class, $result);
+        self::assertEqualsWithDelta(50.461370, $result->getCoordinates()->getLatitude(), 0.00001);
+        self::assertEqualsWithDelta(4.840830, $result->getCoordinates()->getLongitude(), 0.00001);
+        self::assertSame('83', $result->getStreetNumber());
+        self::assertSame('Chaussée de Charleroi', $result->getStreetName());
+        self::assertSame('5000', $result->getPostalCode());
+        self::assertSame('Namur', $result->getSubLocality());
+        self::assertSame('Namur', $result->getLocality());
     }
 
-    public function testStreetGeocodeQuery()
+    public function testStreetGeocodeQuery(): void
     {
         $provider = new SPW($this->getHttpClient());
         $results = $provider->geocodeQuery(GeocodeQuery::create('Chaussée de Charleroi, Namur'));
 
-        $this->assertInstanceOf(AddressCollection::class, $results);
-        $this->assertNotEmpty($results);
+        self::assertInstanceOf(AddressCollection::class, $results);
+        self::assertNotEmpty($results);
 
-        /** @var \Geocoder\Model\Address $result */
+        /** @var Address $result */
         $result = $results->first();
-        $this->assertInstanceOf(Address::class, $result);
-        $this->assertEqualsWithDelta(50.449540, $result->getCoordinates()->getLatitude(), 0.00001);
-        $this->assertEqualsWithDelta(4.818282, $result->getCoordinates()->getLongitude(), 0.00001);
-        $this->assertEquals('Chaussée de Charleroi', $result->getStreetName());
-        $this->assertEquals('Namur', $result->getLocality());
+        self::assertInstanceOf(Address::class, $result);
+        self::assertEqualsWithDelta(50.449540, $result->getCoordinates()->getLatitude(), 0.00001);
+        self::assertEqualsWithDelta(4.818282, $result->getCoordinates()->getLongitude(), 0.00001);
+        self::assertSame('Chaussée de Charleroi', $result->getStreetName());
+        self::assertSame('Namur', $result->getLocality());
     }
 
-    public function testCityGeocodeQuery()
+    public function testCityGeocodeQuery(): void
     {
         $provider = new SPW($this->getHttpClient());
         $results = $provider->geocodeQuery(GeocodeQuery::create('Namur'));
 
-        $this->assertInstanceOf(AddressCollection::class, $results);
-        $this->assertNotEmpty($results);
+        self::assertInstanceOf(AddressCollection::class, $results);
+        self::assertNotEmpty($results);
 
-        /** @var \Geocoder\Model\Address $result */
+        /** @var Address $result */
         $result = $results->first();
-        $this->assertInstanceOf(Address::class, $result);
-        $this->assertEqualsWithDelta(50.466390, $result->getCoordinates()->getLatitude(), 0.00001);
-        $this->assertEqualsWithDelta(4.866114, $result->getCoordinates()->getLongitude(), 0.00001);
-        $this->assertEquals('Namur', $result->getLocality());
+        self::assertInstanceOf(Address::class, $result);
+        self::assertEqualsWithDelta(50.466390, $result->getCoordinates()->getLatitude(), 0.00001);
+        self::assertEqualsWithDelta(4.866114, $result->getCoordinates()->getLongitude(), 0.00001);
+        self::assertSame('Namur', $result->getLocality());
     }
 
-    public function testGeocodeLocaleException()
+    public function testGeocodeLocaleException(): void
     {
-        $this->expectException(\Geocoder\Exception\InvalidArgument::class);
+        $this->expectException(InvalidArgument::class);
         $this->expectExceptionMessage('Locale must be one of "fr", "nl", or "de".');
 
         $provider = new SPW($this->getMockedHttpClient());
         $provider->geocodeQuery(GeocodeQuery::create('Chaussée de Charleroi 83 5000 Namur')->withLocale('en'));
     }
 
-    public function testReverseLocaleException()
+    public function testReverseLocaleException(): void
     {
-        $this->expectException(\Geocoder\Exception\InvalidArgument::class);
+        $this->expectException(InvalidArgument::class);
         $this->expectExceptionMessage('Locale must be one of "fr", "nl", or "de".');
 
         $provider = new SPW($this->getMockedHttpClient());
         $provider->reverseQuery(ReverseQuery::fromCoordinates(50.461370, 4.840830)->withLocale('en'));
     }
 
-    public function testGeocodeQueryWithNoResults()
+    public function testGeocodeQueryWithNoResults(): void
     {
         $provider = new SPW($this->getHttpClient());
         $results = $provider->geocodeQuery(GeocodeQuery::create('jsajhgsdkfjhsfkjhaldkadjaslgldasd'));
 
-        $this->assertInstanceOf(AddressCollection::class, $results);
-        $this->assertEmpty($results);
+        self::assertInstanceOf(AddressCollection::class, $results);
+        self::assertEmpty($results);
     }
 
-    public function testReverseQueryWithNoResults()
+    public function testReverseQueryWithNoResults(): void
     {
         $provider = new SPW($this->getHttpClient());
         $results = $provider->reverseQuery(ReverseQuery::fromCoordinates(0, 0));
 
-        $this->assertInstanceOf(AddressCollection::class, $results);
-        $this->assertEmpty($results);
+        self::assertInstanceOf(AddressCollection::class, $results);
+        self::assertEmpty($results);
+    }
+
+    protected function getCacheDir()
+    {
+        return __DIR__.'/.cached_responses';
     }
 }

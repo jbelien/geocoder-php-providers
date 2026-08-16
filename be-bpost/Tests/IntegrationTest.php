@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Geocoder package.
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +16,12 @@ use Geocoder\IntegrationTest\ProviderIntegrationTest;
 use Geocoder\Provider\bpost\bpost;
 use Http\Client\HttpClient;
 
-class IntegrationTest extends ProviderIntegrationTest
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class IntegrationTest extends ProviderIntegrationTest
 {
     protected $testAddress = true;
 

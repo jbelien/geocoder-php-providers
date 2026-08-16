@@ -29,26 +29,15 @@ use Psr\Http\Client\ClientInterface;
  */
 final class Addok extends AbstractHttpProvider implements Provider
 {
-    const TYPE_HOUSENUMBER = 'housenumber';
-    const TYPE_STREET = 'street';
-    const TYPE_LOCALITY = 'locality';
-    const TYPE_MUNICIPALITY = 'municipality';
+    public const TYPE_HOUSENUMBER = 'housenumber';
+    public const TYPE_STREET = 'street';
+    public const TYPE_LOCALITY = 'locality';
+    public const TYPE_MUNICIPALITY = 'municipality';
 
     /**
      * @var string
      */
     private $rootUrl;
-
-    /**
-     * @param ClientInterface $client
-     * @param string|null     $locale
-     *
-     * @return Addok
-     */
-    public static function withBANServer(ClientInterface $client)
-    {
-        return new self($client, 'https://data.geopf.fr/geocodage');
-    }
 
     /**
      * @param ClientInterface $client  an HTTP adapter
@@ -61,19 +50,14 @@ final class Addok extends AbstractHttpProvider implements Provider
         $this->rootUrl = rtrim($rootUrl, '/');
     }
 
-    private function getGeocodeEndpointUrl(): string
-    {
-        return $this->rootUrl.'/search/?q=%s&limit=%d&autocomplete=0';
-    }
-
-    private function getReverseEndpointUrl(): string
-    {
-        return $this->rootUrl.'/reverse/?lat=%F&lon=%F';
-    }
-
     /**
-     * {@inheritdoc}
+     * @return Addok
      */
+    public static function withBANServer(ClientInterface $client)
+    {
+        return new self($client, 'https://data.geopf.fr/geocodage');
+    }
+
     public function geocodeQuery(GeocodeQuery $query): Collection
     {
         $address = $query->getText();
@@ -87,10 +71,10 @@ final class Addok extends AbstractHttpProvider implements Provider
             throw new InvalidArgument('Address cannot be empty.');
         }
 
-        $url = sprintf($this->getGeocodeEndpointUrl(), urlencode($address), $query->getLimit());
+        $url = \sprintf($this->getGeocodeEndpointUrl(), urlencode($address), $query->getLimit());
 
         if ($type = $query->getData('type', null)) {
-            $url .= sprintf('&type=%s', $type);
+            $url .= \sprintf('&type=%s', $type);
         }
 
         $json = $this->executeQuery($url);
@@ -108,11 +92,15 @@ final class Addok extends AbstractHttpProvider implements Provider
                 case self::TYPE_HOUSENUMBER:
                     $streetName = !empty($feature->properties->street) ? $feature->properties->street : null;
                     $number = !empty($feature->properties->housenumber) ? $feature->properties->housenumber : null;
+
                     break;
+
                 case self::TYPE_STREET:
                     $streetName = !empty($feature->properties->name) ? $feature->properties->name : null;
                     $number = null;
+
                     break;
+
                 default:
                     $streetName = null;
                     $number = null;
@@ -121,28 +109,25 @@ final class Addok extends AbstractHttpProvider implements Provider
             $postalCode = !empty($feature->properties->postcode) ? $feature->properties->postcode : null;
 
             $results[] = Address::createFromArray([
-                'providedBy'   => $this->getName(),
-                'latitude'     => $coordinates[1],
-                'longitude'    => $coordinates[0],
+                'providedBy' => $this->getName(),
+                'latitude' => $coordinates[1],
+                'longitude' => $coordinates[0],
                 'streetNumber' => $number,
-                'streetName'   => $streetName,
-                'locality'     => $locality,
-                'postalCode'   => $postalCode,
-                'adminLevels'  => $this->getAdminLevels($feature->properties),
+                'streetName' => $streetName,
+                'locality' => $locality,
+                'postalCode' => $postalCode,
+                'adminLevels' => $this->getAdminLevels($feature->properties),
             ]);
         }
 
         return new AddressCollection($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reverseQuery(ReverseQuery $query): Collection
     {
         $coordinates = $query->getCoordinates();
 
-        $url = sprintf($this->getReverseEndpointUrl(), $coordinates->getLatitude(), $coordinates->getLongitude());
+        $url = \sprintf($this->getReverseEndpointUrl(), $coordinates->getLatitude(), $coordinates->getLongitude());
         $json = $this->executeQuery($url);
 
         // no result
@@ -159,33 +144,35 @@ final class Addok extends AbstractHttpProvider implements Provider
             $postalCode = !empty($feature->properties->postcode) ? $feature->properties->postcode : null;
 
             $results[] = Address::createFromArray([
-                'providedBy'   => $this->getName(),
-                'latitude'     => $coordinates[1],
-                'longitude'    => $coordinates[0],
+                'providedBy' => $this->getName(),
+                'latitude' => $coordinates[1],
+                'longitude' => $coordinates[0],
                 'streetNumber' => $number,
-                'streetName'   => $streetName,
-                'locality'     => $municipality,
-                'postalCode'   => $postalCode,
-                'adminLevels'  => $this->getAdminLevels($feature->properties),
+                'streetName' => $streetName,
+                'locality' => $municipality,
+                'postalCode' => $postalCode,
+                'adminLevels' => $this->getAdminLevels($feature->properties),
             ]);
         }
 
         return new AddressCollection($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'addok';
     }
 
-    /**
-     * @param string $url
-     *
-     * @return \stdClass
-     */
+    private function getGeocodeEndpointUrl(): string
+    {
+        return $this->rootUrl.'/search/?q=%s&limit=%d&autocomplete=0';
+    }
+
+    private function getReverseEndpointUrl(): string
+    {
+        return $this->rootUrl.'/reverse/?lat=%F&lon=%F';
+    }
+
     private function executeQuery(string $url): \stdClass
     {
         $content = $this->getUrlContents($url);
@@ -199,8 +186,6 @@ final class Addok extends AbstractHttpProvider implements Provider
     }
 
     /**
-     * @param \stdClass $properties
-     *
      * @return array<int, array<string, mixed>>
      */
     private function getAdminLevels(\stdClass $properties): array
