@@ -88,7 +88,7 @@ jobs:
       run:
         working-directory: ${{ matrix.provider }}
     concurrency:
-      group: phpunit-${{ matrix.provider }}-${{ matrix.php-version }}
+      group: phpunit-${{ matrix.provider }}-${{ matrix.php-version }}-nocache
       cancel-in-progress: true
     strategy:
       fail-fast: false
