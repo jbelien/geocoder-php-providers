@@ -30,6 +30,29 @@ jobs:
     - name: Check coding standards with PHP CS Fixer
       run: composer run-script php-cs-fixer:check
 
+  phpstan:
+    name: PHPStan ${{ matrix.provider }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.provider }}
+    concurrency:
+      group: phpstan-${{ matrix.provider }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        provider: [ "be-bpost", "be-geopunt", "be-spw", "be-urbis", "fr-addok" ]
+    steps:
+    - uses: actions/checkout@v7
+    - uses: shivammathur/setup-php@v2
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+    - name: Install dependencies
+      run: composer install --no-progress
+    - name: Run static analysis with PHPStan
+      run: composer run-script phpstan
+
   phpunit:
     name: PHPUnit ${{ matrix.provider }} - PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
