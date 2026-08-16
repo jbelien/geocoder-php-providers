@@ -23,15 +23,15 @@ use Psr\Http\Client\ClientInterface;
  */
 final class IntegrationTest extends ProviderIntegrationTest
 {
-    protected $testAddress = true;
+    protected bool $testAddress = true;
 
-    protected $testReverse = true;
+    protected bool $testReverse = true;
 
-    protected $testIpv4 = false;
+    protected bool $testIpv4 = false;
 
-    protected $testIpv6 = false;
+    protected bool $testIpv6 = false;
 
-    protected $skippedTests = [
+    protected array $skippedTests = [
         'testGeocodeQuery' => 'Geopunt provider supports Brussels and Flanders (Belgium) only.',
         'testReverseQuery' => 'Geopunt provider supports Brussels and Flanders (Belgium) only.',
         'testReverseQueryWithNoResults' => 'Geopunt provider supports Brussels and Flanders (Belgium) only.',
@@ -42,10 +42,13 @@ final class IntegrationTest extends ProviderIntegrationTest
         return new Geopunt($httpClient);
     }
 
-    protected function getCacheDir()
+    protected function getCacheDir(): string
     {
         return __DIR__.'/.cached_responses';
     }
 
-    protected function getApiKey(): void {}
+    protected function getApiKey(): string
+    {
+        return '';
+    }
 }
