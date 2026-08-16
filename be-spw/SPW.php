@@ -33,7 +33,7 @@ final class SPW extends AbstractHttpProvider implements Provider
     /**
      * @var string
      */
-    const ENDPOINT_URL = 'https://geoservices.wallonie.be/geocodeWS';
+    public const ENDPOINT_URL = 'https://geoservices.wallonie.be/geocodeWS';
 
     /**
      * @param ClientInterface $client an HTTP adapter
@@ -43,9 +43,6 @@ final class SPW extends AbstractHttpProvider implements Provider
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function geocodeQuery(GeocodeQuery $query): Collection
     {
         $address = $query->getText();
@@ -55,56 +52,21 @@ final class SPW extends AbstractHttpProvider implements Provider
             throw new UnsupportedOperation('The SPW provider does not support IP addresses, only street addresses.');
         }
 
-        if (!empty($locale) && !in_array($locale, ['fr', 'nl', 'de'])) {
+        if (!empty($locale) && !\in_array($locale, ['fr', 'nl', 'de'], true)) {
             throw new InvalidArgument('Locale must be one of "fr", "nl", or "de".');
         }
 
         $url = self::ENDPOINT_URL.'/geocode?'.http_build_query([
             'address' => $address,
-            'bbox'    => true,
-            'geom'    => true,
-            'crs'     => 'EPSG:4326',
-            'lang'    => $query->getLocale(),
-        ]);
-
-        $response = $this->getUrlContents($url);
-        $json = json_decode($response, true);
-        if (is_null($json) || !is_array($json)) {
-            throw InvalidServerResponse::create($url);
-        }
-
-        $results = [];
-        foreach ($json['candidates'] as $candidate) {
-            $results[] = $this->createAddress($candidate);
-        }
-
-        return new AddressCollection($results);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function reverseQuery(ReverseQuery $query): Collection
-    {
-        $coordinates = $query->getCoordinates();
-        $locale = $query->getLocale();
-
-        if (!empty($locale) && !in_array($locale, ['fr', 'nl', 'de'])) {
-            throw new InvalidArgument('Locale must be one of "fr", "nl", or "de".');
-        }
-
-        $url = self::ENDPOINT_URL.'/revgeocode?'.http_build_query([
-            'x'    => $coordinates->getLongitude(),
-            'y'    => $coordinates->getLatitude(),
             'bbox' => true,
             'geom' => true,
-            'crs'  => 'EPSG:4326',
+            'crs' => 'EPSG:4326',
             'lang' => $query->getLocale(),
         ]);
 
         $response = $this->getUrlContents($url);
         $json = json_decode($response, true);
-        if (is_null($json) || !is_array($json)) {
+        if (null === $json || !\is_array($json)) {
             throw InvalidServerResponse::create($url);
         }
 
@@ -116,9 +78,38 @@ final class SPW extends AbstractHttpProvider implements Provider
         return new AddressCollection($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function reverseQuery(ReverseQuery $query): Collection
+    {
+        $coordinates = $query->getCoordinates();
+        $locale = $query->getLocale();
+
+        if (!empty($locale) && !\in_array($locale, ['fr', 'nl', 'de'], true)) {
+            throw new InvalidArgument('Locale must be one of "fr", "nl", or "de".');
+        }
+
+        $url = self::ENDPOINT_URL.'/revgeocode?'.http_build_query([
+            'x' => $coordinates->getLongitude(),
+            'y' => $coordinates->getLatitude(),
+            'bbox' => true,
+            'geom' => true,
+            'crs' => 'EPSG:4326',
+            'lang' => $query->getLocale(),
+        ]);
+
+        $response = $this->getUrlContents($url);
+        $json = json_decode($response, true);
+        if (null === $json || !\is_array($json)) {
+            throw InvalidServerResponse::create($url);
+        }
+
+        $results = [];
+        foreach ($json['candidates'] as $candidate) {
+            $results[] = $this->createAddress($candidate);
+        }
+
+        return new AddressCollection($results);
+    }
+
     public function getName(): string
     {
         return 'spw';

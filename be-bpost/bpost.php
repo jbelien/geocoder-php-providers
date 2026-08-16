@@ -34,28 +34,25 @@ final class bpost extends AbstractHttpProvider implements Provider
     /**
      * @var string
      */
-    const GEOCODE_ENDPOINT_TEST_URL = 'https://api.mailops-np.bpost.cloud/roa-info-st2/externalMailingAddressProofingRest/validateAddresses';
-    const GEOCODE_ENDPOINT_UAT_URL = 'https://api.mailops-np.bpost.cloud/roa-info-ac/externalMailingAddressProofingRest/validateAddresses';
-    const GEOCODE_ENDPOINT_PROD_URL = 'https://api.mailops.bpost.cloud/roa-info/externalMailingAddressProofingRest/validateAddresses';
+    public const GEOCODE_ENDPOINT_TEST_URL = 'https://api.mailops-np.bpost.cloud/roa-info-st2/externalMailingAddressProofingRest/validateAddresses';
+    public const GEOCODE_ENDPOINT_UAT_URL = 'https://api.mailops-np.bpost.cloud/roa-info-ac/externalMailingAddressProofingRest/validateAddresses';
+    public const GEOCODE_ENDPOINT_PROD_URL = 'https://api.mailops.bpost.cloud/roa-info/externalMailingAddressProofingRest/validateAddresses';
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $apiKey;
 
     /**
      * @param HttpClient $client an HTTP adapter
      */
-    public function __construct(HttpClient $client, string $apiKey = null)
+    public function __construct(HttpClient $client, ?string $apiKey = null)
     {
         parent::__construct($client);
 
         $this->apiKey = $apiKey;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function geocodeQuery(GeocodeQuery $query): Collection
     {
         $address = $query->getText();
@@ -73,38 +70,38 @@ final class bpost extends AbstractHttpProvider implements Provider
         $streetName = $query->getData('streetName');
         $streetNumber = $query->getData('streetNumber');
 
-        if (!is_null($streetName) && !is_null($streetNumber)) {
+        if (null !== $streetName && null !== $streetNumber) {
             $addressToValidate = [
-                '@id'           => 1,
+                '@id' => 1,
                 'PostalAddress' => [
                     'DeliveryPointLocation' => [
                         'StructuredDeliveryPointLocation' => [
-                            'StreetName'   => $query->getData('streetName'),
+                            'StreetName' => $query->getData('streetName'),
                             'StreetNumber' => $query->getData('streetNumber'),
                         ],
                     ],
                     'PostalCodeMunicipality' => [
                         'StructuredPostalCodeMunicipality' => [
-                            'PostalCode'       => $query->getData('postalCode', ''),
+                            'PostalCode' => $query->getData('postalCode', ''),
                             'MunicipalityName' => $query->getData('locality', ''),
                         ],
                     ],
                 ],
-                'DeliveringCountryISOCode'  => 'BE',
+                'DeliveringCountryISOCode' => 'BE',
                 'DispatchingCountryISOCode' => 'BE',
             ];
         } else {
             $addressToValidate = [
-                '@id'               => 1,
+                '@id' => 1,
                 'AddressBlockLines' => [
                     'UnstructuredAddressLine' => [
                         [
-                            '*body'   => $address,
+                            '*body' => $address,
                             '@locale' => $query->getLocale(),
                         ],
                     ],
                 ],
-                'DeliveringCountryISOCode'  => 'BE',
+                'DeliveringCountryISOCode' => 'BE',
                 'DispatchingCountryISOCode' => 'BE',
             ];
         }
@@ -117,9 +114,9 @@ final class bpost extends AbstractHttpProvider implements Provider
                 ],
             ],
             'ValidateAddressOptions' => [
-                'IncludeSuggestions'        => false,
+                'IncludeSuggestions' => false,
                 'IncludeDefaultGeoLocation' => true,
-                'IncludeSubmittedAddress'   => true,
+                'IncludeSubmittedAddress' => true,
             ],
             'CallerIdentification' => [
                 'CallerName' => 'Geocoder PHP',
@@ -152,7 +149,8 @@ final class bpost extends AbstractHttpProvider implements Provider
                     ->setStreetName($streetName)
                     ->setLocality($municipality)
                     ->setPostalCode($postCode)
-                    ->setCountry($country);
+                    ->setCountry($country)
+                ;
 
                 $results[] = $builder->build();
             }
@@ -161,27 +159,16 @@ final class bpost extends AbstractHttpProvider implements Provider
         return new AddressCollection($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reverseQuery(ReverseQuery $query): Collection
     {
         throw new UnsupportedOperation('The bpost provider does not support reverse geocoding.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'bpost';
     }
 
-    /**
-     * @param string $url
-     *
-     * @return \stdClass
-     */
     private function executeQuery(string $url, string $data): \stdClass
     {
         if (null === $this->apiKey) {
@@ -193,7 +180,7 @@ final class bpost extends AbstractHttpProvider implements Provider
             $url,
             [
                 'Content-Type' => 'application/json',
-                'x-api-key'    => $this->apiKey,
+                'x-api-key' => $this->apiKey,
             ],
             $data
         );

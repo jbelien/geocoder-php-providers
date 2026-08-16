@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Geocoder package.
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +16,12 @@ use Geocoder\IntegrationTest\ProviderIntegrationTest;
 use Geocoder\Provider\Geopunt\Geopunt;
 use Psr\Http\Client\ClientInterface;
 
-class IntegrationTest extends ProviderIntegrationTest
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class IntegrationTest extends ProviderIntegrationTest
 {
     protected $testAddress = true;
 
@@ -25,8 +32,8 @@ class IntegrationTest extends ProviderIntegrationTest
     protected $testIpv6 = false;
 
     protected $skippedTests = [
-        'testGeocodeQuery'              => 'Geopunt provider supports Brussels and Flanders (Belgium) only.',
-        'testReverseQuery'              => 'Geopunt provider supports Brussels and Flanders (Belgium) only.',
+        'testGeocodeQuery' => 'Geopunt provider supports Brussels and Flanders (Belgium) only.',
+        'testReverseQuery' => 'Geopunt provider supports Brussels and Flanders (Belgium) only.',
         'testReverseQueryWithNoResults' => 'Geopunt provider supports Brussels and Flanders (Belgium) only.',
     ];
 
@@ -40,7 +47,5 @@ class IntegrationTest extends ProviderIntegrationTest
         return __DIR__.'/.cached_responses';
     }
 
-    protected function getApiKey()
-    {
-    }
+    protected function getApiKey(): void {}
 }

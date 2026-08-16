@@ -32,12 +32,12 @@ final class Geopunt extends AbstractHttpProvider implements Provider
     /**
      * @var string
      */
-    const GEOCODE_ENDPOINT_URL = 'https://geo.api.vlaanderen.be/geolocation/v4/Location?q=%s&c=%d';
+    public const GEOCODE_ENDPOINT_URL = 'https://geo.api.vlaanderen.be/geolocation/v4/Location?q=%s&c=%d';
 
     /**
      * @var string
      */
-    const REVERSE_ENDPOINT_URL = 'https://geo.api.vlaanderen.be/geolocation/v4/Location?latlon=%F,%F&c=%d';
+    public const REVERSE_ENDPOINT_URL = 'https://geo.api.vlaanderen.be/geolocation/v4/Location?latlon=%F,%F&c=%d';
 
     /**
      * @param ClientInterface $client an HTTP adapter
@@ -47,9 +47,6 @@ final class Geopunt extends AbstractHttpProvider implements Provider
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function geocodeQuery(GeocodeQuery $query): Collection
     {
         $address = $query->getText();
@@ -63,7 +60,7 @@ final class Geopunt extends AbstractHttpProvider implements Provider
             throw new InvalidArgument('Address cannot be empty.');
         }
 
-        $url = sprintf(self::GEOCODE_ENDPOINT_URL, urlencode($address), $query->getLimit());
+        $url = \sprintf(self::GEOCODE_ENDPOINT_URL, urlencode($address), $query->getLimit());
         $json = $this->executeQuery($url);
 
         // no result
@@ -89,7 +86,8 @@ final class Geopunt extends AbstractHttpProvider implements Provider
                     $location->BoundingBox->LowerLeft->Lon_WGS84,
                     $location->BoundingBox->UpperRight->Lat_WGS84,
                     $location->BoundingBox->UpperRight->Lon_WGS84
-                );
+                )
+            ;
 
             $results[] = $builder->build();
         }
@@ -97,14 +95,11 @@ final class Geopunt extends AbstractHttpProvider implements Provider
         return new AddressCollection($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reverseQuery(ReverseQuery $query): Collection
     {
         $coordinates = $query->getCoordinates();
 
-        $url = sprintf(self::REVERSE_ENDPOINT_URL, $coordinates->getLatitude(), $coordinates->getLongitude(), $query->getLimit());
+        $url = \sprintf(self::REVERSE_ENDPOINT_URL, $coordinates->getLatitude(), $coordinates->getLongitude(), $query->getLimit());
         $json = $this->executeQuery($url);
 
         // no result
@@ -130,7 +125,8 @@ final class Geopunt extends AbstractHttpProvider implements Provider
                     $location->BoundingBox->LowerLeft->Lon_WGS84,
                     $location->BoundingBox->UpperRight->Lat_WGS84,
                     $location->BoundingBox->UpperRight->Lon_WGS84
-                );
+                )
+            ;
 
             $results[] = $builder->build();
         }
@@ -138,19 +134,11 @@ final class Geopunt extends AbstractHttpProvider implements Provider
         return new AddressCollection($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'geopunt';
     }
 
-    /**
-     * @param string $url
-     *
-     * @return \stdClass
-     */
     private function executeQuery(string $url): \stdClass
     {
         $content = $this->getUrlContents($url);
