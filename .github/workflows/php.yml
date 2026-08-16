@@ -82,7 +82,7 @@ jobs:
     - name: Run test suite
       run: composer run-script test-ci
   phpunit-nocache:
-    name: PHPUnit ${{ matrix.provider }} - PHP ${{ matrix.php-version }}
+    name: PHPUnit ${{ matrix.provider }} - PHP ${{ matrix.php-version }} (no cache)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -97,10 +97,8 @@ jobs:
         php-version: [ "8.2", "8.3", "8.4", "8.5" ]
     steps:
     - uses: actions/checkout@v7
-    - name: Use PHP ${{ matrix.php-version }}
-      uses: shivammathur/setup-php@v2
+    - uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-version }}
         extensions: curl
         coverage: xdebug
     - name: Validate composer.json and composer.lock
