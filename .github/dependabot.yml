@@ -14,10 +14,6 @@ updates:
       - "/fr-addok/"
     schedule:
       interval: monthly
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - version-update:semver-major
     groups:
       production:
         dependency-type: production
