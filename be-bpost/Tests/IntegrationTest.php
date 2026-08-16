@@ -14,7 +14,7 @@ namespace Geocoder\Provider\bpost\Tests;
 
 use Geocoder\IntegrationTest\ProviderIntegrationTest;
 use Geocoder\Provider\bpost\bpost;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 
 /**
  * @internal
@@ -23,29 +23,29 @@ use Http\Client\HttpClient;
  */
 final class IntegrationTest extends ProviderIntegrationTest
 {
-    protected $testAddress = true;
+    protected bool $testAddress = true;
 
-    protected $testReverse = false;
+    protected bool $testReverse = false;
 
-    protected $testIpv4 = false;
+    protected bool $testIpv4 = false;
 
-    protected $testIpv6 = false;
+    protected bool $testIpv6 = false;
 
-    protected $skippedTests = [
+    protected array $skippedTests = [
         'testGeocodeQuery' => 'Belgium only.',
     ];
 
-    protected function createProvider(HttpClient $httpClient)
+    protected function createProvider(ClientInterface $httpClient)
     {
         return new bpost($httpClient, $_SERVER['BPOST_API_KEY']);
     }
 
-    protected function getCacheDir()
+    protected function getCacheDir(): string
     {
         return __DIR__.'/.cached_responses';
     }
 
-    protected function getApiKey()
+    protected function getApiKey(): string
     {
         return $_SERVER['BPOST_API_KEY'];
     }

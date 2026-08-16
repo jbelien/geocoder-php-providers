@@ -24,7 +24,7 @@ use Geocoder\Model\AddressCollection;
 use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 
 /**
  * @author Jonathan Beliën <jbe@geo6.be>
@@ -44,9 +44,9 @@ final class bpost extends AbstractHttpProvider implements Provider
     private $apiKey;
 
     /**
-     * @param HttpClient $client an HTTP adapter
+     * @param ClientInterface $client an HTTP adapter
      */
-    public function __construct(HttpClient $client, ?string $apiKey = null)
+    public function __construct(ClientInterface $client, ?string $apiKey = null)
     {
         parent::__construct($client);
 
@@ -175,7 +175,7 @@ final class bpost extends AbstractHttpProvider implements Provider
             throw new InvalidCredentials('You must provide an API key.');
         }
 
-        $request = $this->getMessageFactory()->createRequest(
+        $request = $this->createRequest(
             'POST',
             $url,
             [
