@@ -9,9 +9,6 @@
       <directory>./vendor</directory>
     </exclude>
   </coverage>
-  <php>
-    <server name="USE_CACHED_RESPONSES" value="true"/>
-  </php>
   <testsuites>
     <testsuite name="Geocoder Test Suite">
       <directory>./Tests/</directory>
