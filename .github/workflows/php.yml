@@ -10,6 +10,9 @@ jobs:
   test:
     name: ${{ matrix.provider }} - PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ matrix.provider }}-php-${{ matrix.php-version }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
