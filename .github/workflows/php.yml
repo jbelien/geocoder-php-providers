@@ -10,6 +10,9 @@ jobs:
   test:
     name: ${{ matrix.provider }} - PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.provider }}
     concurrency:
       group: ${{ matrix.provider }}-php-${{ matrix.php-version }}
       cancel-in-progress: true
@@ -26,8 +29,6 @@ jobs:
         php-version: ${{ matrix.php-version }}
         extensions: curl
         coverage: xdebug
-    - name: Focus on provider ${{ matrix.provider }}
-      run: cd ${{ matrix.provider }}
     - name: Validate composer.json and composer.lock
       run: composer validate
     - name: Install dependencies
