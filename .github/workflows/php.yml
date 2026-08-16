@@ -7,14 +7,37 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
-    name: ${{ matrix.provider }} - PHP ${{ matrix.php-version }}
+  php-cs-fixer:
+    name: PHP CS Fixer ${{ matrix.provider }}
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ${{ matrix.provider }}
     concurrency:
-      group: ${{ matrix.provider }}-php-${{ matrix.php-version }}
+      group: phpcsfixer-${{ matrix.provider }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        provider: [ "be-bpost", "be-geopunt", "be-spw", "be-urbis", "fr-addok" ]
+    steps:
+    - uses: actions/checkout@v7
+    - uses: shivammathur/setup-php@v2
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+    - name: Install dependencies
+      run: composer install --no-progress
+    - name: Check coding standards with PHP CS Fixer
+      run: composer run-script php-cs-fixer:check
+
+  phpunit:
+    name: PHPUnit ${{ matrix.provider }} - PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.provider }}
+    concurrency:
+      group: phpunit-${{ matrix.provider }}-${{ matrix.php-version }}
       cancel-in-progress: true
     strategy:
       fail-fast: false
