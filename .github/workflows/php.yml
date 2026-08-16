@@ -82,7 +82,7 @@ jobs:
     - name: Run test suite
       run: composer run-script test-ci
   phpunit-nocache:
-    name: PHPUnit ${{ matrix.provider }} - PHP ${{ matrix.php-version }} (no cache)
+    name: PHPUnit ${{ matrix.provider }} (no cache)
     runs-on: ubuntu-latest
     defaults:
       run:
