@@ -109,7 +109,7 @@ final class bpostTest extends BaseTestCase
         self::assertSame('BELGIQUE', $result->getCountry());
     }
 
-    protected function getCacheDir()
+    protected function getCacheDir(): string
     {
         return __DIR__.'/.cached_responses';
     }

@@ -89,7 +89,7 @@ final class UrbISTest extends BaseTestCase
         self::assertSame('Bruxelles', $result->getLocality());
     }
 
-    protected function getCacheDir()
+    protected function getCacheDir(): string
     {
         return __DIR__.'/.cached_responses';
     }

@@ -89,8 +89,8 @@ final class GeopuntTest extends BaseTestCase
         self::assertSame('Zonhoven', $result->getLocality());
     }
 
-    protected function getCacheDir()
+    protected function getCacheDir(): ?string
     {
-        return __DIR__.'/.cached_responses';
+        return null;
     }
 }

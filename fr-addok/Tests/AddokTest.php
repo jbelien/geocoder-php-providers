@@ -194,7 +194,7 @@ final class AddokTest extends BaseTestCase
         self::assertSame('Blagnac', $result->getLocality());
     }
 
-    protected function getCacheDir()
+    protected function getCacheDir(): string
     {
         return __DIR__.'/.cached_responses';
     }
