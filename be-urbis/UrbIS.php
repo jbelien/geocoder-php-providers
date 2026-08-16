@@ -98,7 +98,7 @@ final class UrbIS extends AbstractHttpProvider implements Provider
     public function reverseQuery(ReverseQuery $query): Collection
     {
         $coordinates = $query->getCoordinates();
-        $language = $query->getLocale() ?? '';
+        $language = $query->getLocale();
 
         $jsonQuery = [
             'language' => $language,

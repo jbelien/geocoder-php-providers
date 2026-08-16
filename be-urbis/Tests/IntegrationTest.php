@@ -23,15 +23,15 @@ use Psr\Http\Client\ClientInterface;
  */
 final class IntegrationTest extends ProviderIntegrationTest
 {
-    protected $testAddress = true;
+    protected bool $testAddress = true;
 
-    protected $testReverse = true;
+    protected bool $testReverse = true;
 
-    protected $testIpv4 = false;
+    protected bool $testIpv4 = false;
 
-    protected $testIpv6 = false;
+    protected bool $testIpv6 = false;
 
-    protected $skippedTests = [
+    protected array $skippedTests = [
         'testGeocodeQuery' => 'UrbIS provider supports Brussels (Belgium) only.',
         'testReverseQuery' => 'UrbIS provider supports Brussels (Belgium) only.',
         'testGeocodeQueryWithNoResults' => 'UrbIS provider returns "wrong" results!',
@@ -43,10 +43,13 @@ final class IntegrationTest extends ProviderIntegrationTest
         return new UrbIS($httpClient);
     }
 
-    protected function getCacheDir()
+    protected function getCacheDir(): string
     {
         return __DIR__.'/.cached_responses';
     }
 
-    protected function getApiKey(): void {}
+    protected function getApiKey(): string
+    {
+        return '';
+    }
 }
