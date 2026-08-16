@@ -115,6 +115,9 @@ final class SPW extends AbstractHttpProvider implements Provider
         return 'spw';
     }
 
+    /**
+     * @param array<string, mixed> $candidate
+     */
     private function createAddress(array $candidate): Address
     {
         $builder = new AddressBuilder($this->getName());
