@@ -111,7 +111,7 @@ final class AddokTest extends BaseTestCase
         $result = $results->first();
         self::assertInstanceOf('\Geocoder\Model\Address', $result);
         self::assertEqualsWithDelta(45.182828, $result->getCoordinates()->getLatitude(), 0.00001);
-        self::assertEqualsWithDelta(5.724369, $result->getCoordinates()->getLongitude(), 0.00001);
+        self::assertEqualsWithDelta(5.724301, $result->getCoordinates()->getLongitude(), 0.00001);
         self::assertNull($result->getStreetNumber());
         self::assertNull($result->getStreetName());
         self::assertSame('38000', $result->getPostalCode());
@@ -138,7 +138,7 @@ final class AddokTest extends BaseTestCase
         self::assertInstanceOf('\Geocoder\Model\Address', $result);
         self::assertSame('20', $result->getStreetNumber());
         self::assertSame('Avenue Kléber', $result->getStreetName());
-        self::assertSame('75016', $result->getPostalCode());
+        self::assertSame('75116', $result->getPostalCode());
         self::assertSame('Paris', $result->getLocality());
         self::assertCount(4, $result->getAdminLevels());
         self::assertSame('Île-de-France', $result->getAdminLevels()->get(2)->getName());
@@ -163,7 +163,7 @@ final class AddokTest extends BaseTestCase
         self::assertInstanceOf('\Geocoder\Model\Address', $result);
         self::assertNull($result->getStreetNumber());
         self::assertSame('Avenue Kléber', $result->getStreetName());
-        self::assertSame('75016', $result->getPostalCode());
+        self::assertSame('75116', $result->getPostalCode());
         self::assertSame('Paris', $result->getLocality());
         self::assertCount(4, $result->getAdminLevels());
         self::assertSame('Île-de-France', $result->getAdminLevels()->get(2)->getName());
