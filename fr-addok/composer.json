@@ -1,15 +1,9 @@
 {
-    "name": "geo6/geocoder-php-addok-provider",
+    "name": "jbelien/geocoder-php-addok-provider",
     "type": "library",
     "description": "Geocoder addok adapter",
     "keywords": [],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Jonathan Beliën",
-            "email": "jbe@geo6.be"
-        }
-    ],
     "require": {
         "php": "^8.0",
         "geocoder-php/common-http": "^4.1",

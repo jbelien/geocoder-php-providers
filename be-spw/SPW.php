@@ -25,9 +25,6 @@ use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
 use Psr\Http\Client\ClientInterface;
 
-/**
- * @author Jonathan Beliën <jbe@geo6.be>
- */
 final class SPW extends AbstractHttpProvider implements Provider
 {
     /**

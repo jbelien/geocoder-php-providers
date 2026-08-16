@@ -1,15 +1,9 @@
 {
-    "name": "geo6/geocoder-php-geopunt-provider",
+    "name": "jbelien/geocoder-php-geopunt-provider",
     "type": "library",
     "description": "Geocoder Geopunt adapter",
     "keywords": [],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Jonathan Beliën",
-            "email": "jbe@geo6.be"
-        }
-    ],
     "require": {
         "php": "^7.4 || ^8.0",
         "geocoder-php/common-http": "^4.0",

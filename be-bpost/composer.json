@@ -1,15 +1,9 @@
 {
-    "name": "geo6/geocoder-php-bpost-provider",
+    "name": "jbelien/geocoder-php-bpost-provider",
     "type": "library",
     "description": "Geocoder bpost adapter",
     "keywords": [],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Jonathan Beliën",
-            "email": "jbe@geo6.be"
-        }
-    ],
     "require": {
         "php": "^7.3 || ^8.0",
         "geocoder-php/common-http": "^4.1",

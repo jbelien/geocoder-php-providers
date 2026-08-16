@@ -24,9 +24,6 @@ use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
 use Psr\Http\Client\ClientInterface;
 
-/**
- * @author Jonathan Beliën <jbe@geo6.be>
- */
 final class Addok extends AbstractHttpProvider implements Provider
 {
     public const TYPE_HOUSENUMBER = 'housenumber';
