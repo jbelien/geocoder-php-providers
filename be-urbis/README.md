@@ -9,6 +9,9 @@ This is the "UrbIS" provider for the [Geocoder PHP](https://github.com/geocoder-
 ![Monthly Downloads](https://poser.pugx.org/jbelien/geocoder-php-urbis-provider/d/monthly)
 ![License](https://poser.pugx.org/jbelien/geocoder-php-urbis-provider/license)
 
+> [!NOTE]
+> If you want to submit an Issue or create a Pull Request, please do so in the main repository: <https://github.com/jbelien/geocoder-php-providers>.
+
 ## Information
 
 - **Coverage:** Brussels (Belgium)

@@ -9,6 +9,9 @@ This is the "Service Public de Wallonie" provider for the [Geocoder PHP](https:/
 ![Monthly Downloads](https://poser.pugx.org/jbelien/geocoder-php-spw-provider/d/monthly)
 ![License](https://poser.pugx.org/jbelien/geocoder-php-spw-provider/license)
 
+> [!NOTE]
+> If you want to submit an Issue or create a Pull Request, please do so in the main repository: <https://github.com/jbelien/geocoder-php-providers>.
+
 ## Information
 
 - **Coverage:** Belgium

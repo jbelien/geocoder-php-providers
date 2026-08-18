@@ -9,6 +9,9 @@ This is the "Geopunt" provider for the [Geocoder PHP](https://github.com/geocode
 ![Monthly Downloads](https://poser.pugx.org/jbelien/geocoder-php-geopunt-provider/d/monthly)
 ![License](https://poser.pugx.org/jbelien/geocoder-php-geopunt-provider/license)
 
+> [!NOTE]
+> If you want to submit an Issue or create a Pull Request, please do so in the main repository: <https://github.com/jbelien/geocoder-php-providers>.
+
 ## Information
 
 - **Coverage:** Flanders + Brussels (Belgium)
