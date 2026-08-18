@@ -1,23 +1,24 @@
-# :belgium: [Geocoder PHP](https://github.com/geocoder-php/Geocoder) "bpost" provider
-
-[![PHP CI](https://github.com/geo6/geocoder-php-bpost-provider/workflows/PHP%20CI/badge.svg)](https://github.com/geo6/geocoder-php-bpost-provider/actions)
-[![Latest Stable Version](https://poser.pugx.org/geo6/geocoder-php-bpost-provider/v/stable)](https://packagist.org/packages/geo6/geocoder-php-bpost-provider)
-[![Total Downloads](https://poser.pugx.org/geo6/geocoder-php-bpost-provider/downloads)](https://packagist.org/packages/geo6/geocoder-php-bpost-provider)
-[![Monthly Downloads](https://poser.pugx.org/geo6/geocoder-php-bpost-provider/d/monthly.png)](https://packagist.org/packages/geo6/geocoder-php-bpost-provider)
-[![Code Coverage](https://scrutinizer-ci.com/g/geo6/geocoder-php-bpost-provider/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/geo6/geocoder-php-bpost-provider/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/geo6/geocoder-php-bpost-provider/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/geo6/geocoder-php-bpost-provider/?branch=master)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
+# 🇧🇪 Geocoder PHP "bpost" provider
 
 > [Geocoder PHP](https://github.com/geocoder-php/Geocoder) is a PHP library which helps you build geo-aware applications by providing a powerful abstraction layer for geocoding manipulations.
 
 This is the "bpost" provider for the [Geocoder PHP](https://github.com/geocoder-php/Geocoder).
 
-**Coverage:** Belgium  
-**API:** <https://www.bpost.be/site/en/webservice-address>
+![Latest Stable Version](https://poser.pugx.org/jbelien/geocoder-php-bpost-provider/v)
+![Total Downloads](https://poser.pugx.org/jbelien/geocoder-php-bpost-provider/downloads)
+![Monthly Downloads](https://poser.pugx.org/jbelien/geocoder-php-bpost-provider/d/monthly)
+![License](https://poser.pugx.org/jbelien/geocoder-php-bpost-provider/license)
+
+## Information
+
+- **Coverage:** Belgium
+- **Demo:** <https://www.bpost.be/site/en/webservice-address>
 
 ## Install
 
-    composer require geo6/geocoder-php-bpost-provider
+```bash
+composer require jbelien/geocoder-php-bpost-provider
+```
 
 ## Usage
 
