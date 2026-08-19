@@ -27,23 +27,23 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
-      - name: Detect changes
-        uses: dorny/paths-filter@v4
-        id: changes
-        with:
-          list-files: shell
-          filters: |
-            directory:
-              - "${{ matrix.provider.folder }}/**"
+      # - name: Detect changes
+      #   uses: dorny/paths-filter@v4
+      #   id: changes
+      #   with:
+      #     list-files: shell
+      #     filters: |
+      #       directory:
+      #         - "${{ matrix.provider.folder }}/**"
       - name: Filter Repo
-        if: steps.changes.outputs.directory == 'true'
+        # if: steps.changes.outputs.directory == 'true'
         shell: bash
         run: |
           wget -P /usr/local/bin https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo
           chmod +x /usr/local/bin/git-filter-repo
           git filter-repo --debug --force --subdirectory-filter "${{ matrix.provider.folder }}/"
       - name: Push to separate repository
-        if: steps.changes.outputs.directory == 'true'
+        # if: steps.changes.outputs.directory == 'true'
         shell: bash
         run: |
           git remote add subtree "https://github.com/${{ matrix.provider.repository }}.git"
