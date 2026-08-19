@@ -24,6 +24,9 @@ jobs:
           wget -P /usr/local/bin https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo
           chmod +x /usr/local/bin/git-filter-repo
       - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GEOCODER_SPLIT_PAT }}
+          fetch-depth: 0
       # - name: Detect changes
       #   uses: dorny/paths-filter@v4
       #   id: changes
@@ -41,5 +44,6 @@ jobs:
         # if: steps.changes.outputs.directory == 'true'
         shell: bash
         run: |
-          git remote add subtree "https://x-access-token:${{ secrets.GEOCODER_SPLIT_PAT }}@github.com/${{ matrix.provider.repository }}.git"
-          git push --force --set-upstream subtree "HEAD:${{ matrix.provider.branch }}"
+          git remote add provider "https://x-access-token:${{ secrets.GEOCODER_SPLIT_PAT }}@github.com/${{ matrix.provider.repository }}.git"
+          git ls-remote provider
+          git push --force --set-upstream provider "HEAD:${{ matrix.provider.branch }}"
