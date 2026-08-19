@@ -18,6 +18,11 @@ jobs:
           - { folder: be-urbis  , repository: jbelien/geocoder-php-urbis-provider  , branch: "2.x" }
           - { folder: fr-addok  , repository: jbelien/geocoder-php-addok-provider  , branch: "2.x" }
     steps:
+      - name: Install Git Filter Repo
+        shell: bash
+        run: |
+          wget -P /usr/local/bin https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo
+          chmod +x /usr/local/bin/git-filter-repo
       - uses: actions/create-github-app-token@v3
         id: app-token
         with:
@@ -39,12 +44,10 @@ jobs:
         # if: steps.changes.outputs.directory == 'true'
         shell: bash
         run: |
-          wget -P /usr/local/bin https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo
-          chmod +x /usr/local/bin/git-filter-repo
           git filter-repo --debug --force --subdirectory-filter "${{ matrix.provider.folder }}/"
       - name: Push to separate repository
         # if: steps.changes.outputs.directory == 'true'
         shell: bash
         run: |
-          git remote add subtree "https://github.com/${{ matrix.provider.repository }}.git"
+          git remote add subtree "https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ matrix.provider.repository }}.git"
           git push --force --set-upstream subtree "HEAD:${{ matrix.provider.branch }}"
