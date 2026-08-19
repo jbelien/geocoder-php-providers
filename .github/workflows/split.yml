@@ -1,0 +1,50 @@
+name: Split to separate repositories
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  split-provider:
+    name: Split provider ${{ matrix.provider.folder }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        provider:
+          - { folder: be-bpost  , repository: jbelien/geocoder-php-bpost-provider  , branch: "3.x" }
+          - { folder: be-geopunt, repository: jbelien/geocoder-php-geopunt-provider, branch: "2.x" }
+          - { folder: be-spw    , repository: jbelien/geocoder-php-spw-provider    , branch: "3.x" }
+          - { folder: be-urbis  , repository: jbelien/geocoder-php-urbis-provider  , branch: "2.x" }
+          - { folder: fr-addok  , repository: jbelien/geocoder-php-addok-provider  , branch: "2.x" }
+    steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ vars.SPLIT_APP_CLIENT_ID }}
+          private-key: ${{ secrets.SPLIT_APP_PRIVATE_KEY }}
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
+      - name: Detect changes
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          list-files: shell
+          filters: |
+            directory:
+              - "${{ matrix.provider.folder }}/**"
+      - name: Filter Repo
+        if: steps.changes.outputs.directory == 'true'
+        shell: bash
+        run: |
+          wget -P /usr/local/bin https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo
+          chmod +x /usr/local/bin/git-filter-repo
+          git filter-repo --debug --force --subdirectory-filter "${{ matrix.provider.folder }}/"
+      - name: Push to separate repository
+        if: steps.changes.outputs.directory == 'true'
+        shell: bash
+        run: |
+          git remote add subtree "https://github.com/${{ matrix.provider.repository }}.git"
+          git push --force --set-upstream subtree "HEAD:${{ matrix.provider.branch }}"
