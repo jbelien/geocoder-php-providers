@@ -1,4 +1,4 @@
-name: Split to separate repositories
+name: Split
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   split-provider:
-    name: Split provider ${{ matrix.provider.folder }}
+    name: ${{ matrix.provider.folder }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
