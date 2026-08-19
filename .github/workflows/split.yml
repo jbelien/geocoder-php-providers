@@ -27,21 +27,21 @@ jobs:
         with:
           token: ${{ secrets.GEOCODER_SPLIT_PAT }}
           fetch-depth: 0
-      # - name: Detect changes
-      #   uses: dorny/paths-filter@v4
-      #   id: changes
-      #   with:
-      #     list-files: shell
-      #     filters: |
-      #       directory:
-      #         - "${{ matrix.provider.folder }}/**"
+      - name: Detect changes
+        uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          list-files: shell
+          filters: |
+            directory:
+              - "${{ matrix.provider.folder }}/**"
       - name: Filter Repo
-        # if: steps.changes.outputs.directory == 'true'
+        if: steps.changes.outputs.directory == 'true'
         shell: bash
         run: |
           git filter-repo --debug --force --subdirectory-filter "${{ matrix.provider.folder }}/"
       - name: Push to separate repository
-        # if: steps.changes.outputs.directory == 'true'
+        if: steps.changes.outputs.directory == 'true'
         shell: bash
         run: |
           git remote add provider "https://x-access-token:${{ secrets.GEOCODER_SPLIT_PAT }}@github.com/${{ matrix.provider.repository }}.git"
