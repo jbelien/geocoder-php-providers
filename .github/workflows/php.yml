@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions:
+  contents: read
+
 jobs:
   php-cs-fixer:
     name: PHP CS Fixer ${{ matrix.provider }}
