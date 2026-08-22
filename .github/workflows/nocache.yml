@@ -3,6 +3,8 @@ name: PHP CI (no cache)
 on:
   schedule:
     - cron: '0 0 * * 0' # Every Sunday at midnight
+  pull_request:
+    branches: [ master ]
 
 permissions:
   contents: read
