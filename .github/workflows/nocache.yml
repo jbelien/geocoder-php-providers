@@ -1,0 +1,37 @@
+name: PHP CI (no cache)
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Every Sunday at midnight
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit-nocache:
+    name: PHPUnit ${{ matrix.provider }} (no cache)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.provider }}
+    concurrency:
+      group: phpunit-${{ matrix.provider }}-nocache
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        provider: [ "be-geopunt", "be-spw", "be-urbis", "fr-addok" ]
+    steps:
+    - uses: actions/checkout@v7
+    - uses: shivammathur/setup-php@v2
+      with:
+        extensions: curl
+        coverage: xdebug
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+    - name: Install dependencies
+      run: composer install --no-progress
+    - name: Clear cached responses
+      run: rm -rf ./Tests/.cached_responses/*
+    - name: Run test suite
+      run: composer run-script test-ci
