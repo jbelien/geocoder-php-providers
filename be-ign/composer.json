@@ -1,0 +1,46 @@
+{
+    "name": "jbelien/geocoder-php-ign-provider",
+    "type": "library",
+    "description": "Geocoder IGN-NGI adapter",
+    "keywords": [],
+    "license": "MIT",
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "geocoder-php/common-http": "^4.0",
+        "willdurand/geocoder": "^4.0 || ^5.0",
+        "symfony/http-client": "*"
+    },
+    "provide": {
+        "geocoder-php/provider-implementation": "1.0"
+    },
+    "require-dev": {
+        "geocoder-php/provider-integration-tests": "^1.0",
+        "php-http/curl-client": "^2.0",
+        "php-http/message": "^1.0",
+        "phpunit/phpunit": "^9.5",
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "phpstan/phpstan": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Geocoder\\Provider\\IGN\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "php-cs-fixer:check": "php-cs-fixer --config=../.php-cs-fixer.dist.php check . --diff",
+        "php-cs-fixer:fix": "php-cs-fixer --config=../.php-cs-fixer.dist.php fix .",
+        "phpstan": "phpstan analyse --level 6 ./IGN.php ./Tests/",
+        "test": "phpunit",
+        "test-ci": "phpunit --coverage-text --coverage-clover=coverage.clover"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
